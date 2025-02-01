@@ -57,23 +57,43 @@
             margin-bottom: 10px;
         }
 
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
         button {
-            background-color: #dc2626;
-            color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        button:hover {
+        .btn-print {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .btn-print:hover {
             background-color: #b91c1c;
         }
 
+        .btn-clear {
+            background-color: #4b5563;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background-color: #374151;
+        }
+
         .certificate {
-            width: 280mm; /* 28 cm */
-            height: 215mm; /* 21.5 cm */
+            width: 280mm;
+            height: 215mm;
             margin: 0 auto;
             background: white;
             position: relative;
@@ -126,32 +146,16 @@
             line-height: 1.5;
         }
 
-        .signatures {
-            display: flex;
-            justify-content: space-between;
-            padding: 0 40px;
-            margin-top: auto;
-            align-items: flex-end;
-        }
-
-        .signature {
+        .date-section {
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-end;
-            height: 120px;
+            margin-top: auto;
+            padding: 20px 0;
         }
 
-        .signature img {
-            height: 60px;
-            margin-bottom: 10px;
-        }
-
-        .signature-line {
+        .date-line {
             width: 200px;
             border-top: 2px solid #333;
-            margin-top: 10px;
+            margin: 10px auto;
         }
 
         @media print {
@@ -196,16 +200,17 @@
             <input type="file" id="logo" accept="image/*">
         </div>
         <div class="form-group">
-            <label for="firma">Firma:</label>
-            <input type="file" id="firma" accept="image/*">
-        </div>
-        <div class="form-group">
             <label for="fondo">Imagen de Fondo:</label>
             <input type="file" id="fondo" accept="image/*">
         </div>
-        <button onclick="imprimirCertificado()">
-            <i class="fas fa-print"></i> Imprimir Certificado
-        </button>
+        <div class="button-group">
+            <button class="btn-print" onclick="imprimirCertificado()">
+                <i class="fas fa-print"></i> Imprimir Certificado
+            </button>
+            <button class="btn-clear" onclick="limpiarCampos()">
+                <i class="fas fa-eraser"></i> Limpiar Campos
+            </button>
+        </div>
     </div>
 
     <div class="certificate" id="certificado">
@@ -220,16 +225,9 @@
                 <p id="descripcionText" class="certificate-text"></p>
             </div>
             
-            <div class="signatures">
-                <div class="signature">
-                    <p id="fechaText">Fecha</p>
-                    <div class="signature-line"></div>
-                </div>
-                <div class="signature">
-                    <img id="firmaImage" style="display: none;" alt="Firma">
-                    <div class="signature-line"></div>
-                    <p>Firma</p>
-                </div>
+            <div class="date-section">
+                <p id="fechaText">Fecha</p>
+                <div class="date-line"></div>
             </div>
         </div>
     </div>
@@ -264,20 +262,6 @@
             }
         });
 
-        // Manejar la carga de la firma
-        document.getElementById('firma').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const firmaImage = document.getElementById('firmaImage');
-                    firmaImage.src = e.target.result;
-                    firmaImage.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
         // Manejar la carga de la imagen de fondo
         document.getElementById('fondo').addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -289,6 +273,29 @@
                 reader.readAsDataURL(file);
             }
         });
+
+        // Función para limpiar todos los campos
+        function limpiarCampos() {
+            // Limpiar campos de texto
+            document.getElementById('nombreCompleto').value = '';
+            document.getElementById('tipoLogro').value = '';
+            document.getElementById('descripcion').value = '';
+            document.getElementById('fecha').value = '';
+            
+            // Limpiar campos de archivo
+            document.getElementById('logo').value = '';
+            document.getElementById('fondo').value = '';
+            
+            // Restablecer textos en el certificado
+            document.getElementById('nombreText').textContent = '';
+            document.getElementById('logroText').textContent = '';
+            document.getElementById('descripcionText').textContent = '';
+            document.getElementById('fechaText').textContent = 'Fecha';
+            
+            // Restablecer logo y fondo
+            document.getElementById('logoImage').src = 'http://imgfz.com/i/05aKhgE.png';
+            document.getElementById('certificado').style.backgroundImage = 'none';
+        }
 
         // Función para imprimir el certificado
         function imprimirCertificado() {
