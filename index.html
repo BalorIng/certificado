@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Certificados</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+
+        .controls {
+            max-width: 800px;
+            margin: 0 auto 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #dc2626;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #b91c1c;
+        }
+
+        .certificate {
+            width: 280mm; /* 28 cm */
+            height: 215mm; /* 21.5 cm */
+            margin: 0 auto;
+            background: white;
+            position: relative;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin: 20px auto;
+        }
+
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            color: #dc2626;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .recipient-name {
+            font-family: 'Great Vibes', cursive;
+            font-size: 42px;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        .certificate-text {
+            font-size: 20px;
+            margin: 20px 0;
+            line-height: 1.5;
+        }
+
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 40px;
+            margin-top: auto;
+            align-items: flex-end;
+        }
+
+        .signature {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            height: 120px;
+        }
+
+        .signature img {
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .signature-line {
+            width: 200px;
+            border-top: 2px solid #333;
+            margin-top: 10px;
+        }
+
+        @media print {
+            .controls {
+                display: none;
+            }
+            .certificate {
+                box-shadow: none;
+            }
+            @page {
+                size: 280mm 215mm;
+                margin: 0;
+            }
+            .content {
+                background-color: rgba(255, 255, 255, 0.9) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <div class="form-group">
+            <label for="nombreCompleto">Nombre Completo:</label>
+            <input type="text" id="nombreCompleto" placeholder="Ingrese el nombre del destinatario">
+        </div>
+        <div class="form-group">
+            <label for="tipoLogro">Tipo de Logro:</label>
+            <input type="text" id="tipoLogro" placeholder="Ingrese el tipo de logro">
+        </div>
+        <div class="form-group">
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" placeholder="Ingrese la descripción del certificado"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha">
+        </div>
+        <div class="form-group">
+            <label for="logo">Logo:</label>
+            <input type="file" id="logo" accept="image/*">
+        </div>
+        <div class="form-group">
+            <label for="firma">Firma:</label>
+            <input type="file" id="firma" accept="image/*">
+        </div>
+        <div class="form-group">
+            <label for="fondo">Imagen de Fondo:</label>
+            <input type="file" id="fondo" accept="image/*">
+        </div>
+        <button onclick="imprimirCertificado()">
+            <i class="fas fa-print"></i> Imprimir Certificado
+        </button>
+    </div>
+
+    <div class="certificate" id="certificado">
+        <div class="content">
+            <div>
+                <img src="http://imgfz.com/i/05aKhgE.png" alt="Logo" id="logoImage" class="logo">
+                <h1 class="title">Certificado</h1>
+                <p class="certificate-text">ESTE CERTIFICADO SE OTORGA CON HONOR POR</p>
+                <p id="logroText" class="certificate-text"></p>
+                <p class="certificate-text">A</p>
+                <p id="nombreText" class="recipient-name"></p>
+                <p id="descripcionText" class="certificate-text"></p>
+            </div>
+            
+            <div class="signatures">
+                <div class="signature">
+                    <p id="fechaText">Fecha</p>
+                    <div class="signature-line"></div>
+                </div>
+                <div class="signature">
+                    <img id="firmaImage" style="display: none;" alt="Firma">
+                    <div class="signature-line"></div>
+                    <p>Firma</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Actualizar el contenido del certificado en tiempo real
+        document.getElementById('nombreCompleto').addEventListener('input', function(e) {
+            document.getElementById('nombreText').textContent = e.target.value;
+        });
+
+        document.getElementById('tipoLogro').addEventListener('input', function(e) {
+            document.getElementById('logroText').textContent = e.target.value;
+        });
+
+        document.getElementById('descripcion').addEventListener('input', function(e) {
+            document.getElementById('descripcionText').textContent = e.target.value;
+        });
+
+        document.getElementById('fecha').addEventListener('input', function(e) {
+            document.getElementById('fechaText').textContent = e.target.value;
+        });
+
+        // Manejar la carga del logo
+        document.getElementById('logo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('logoImage').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Manejar la carga de la firma
+        document.getElementById('firma').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const firmaImage = document.getElementById('firmaImage');
+                    firmaImage.src = e.target.result;
+                    firmaImage.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Manejar la carga de la imagen de fondo
+        document.getElementById('fondo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('certificado').style.backgroundImage = `url(${e.target.result})`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Función para imprimir el certificado
+        function imprimirCertificado() {
+            window.print();
+        }
+    </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
